@@ -1,8 +1,8 @@
 # Air pollution prediction platform (Sarajevo)
 
-Collaborators: Andrijana Kešelj, Anđela Maksimović, Šehzada Sijarić
+Collaborators: Andrijana Kešelj, Anđela Maksimović and Šehzada Sijarić
+
 This project is done by the  students of DSAI at ETF Sarajevo.
-Here’s your list with a fitting emoji before each item:
 
 ## Table of Contents
 - [📖 Overview](#overview)
