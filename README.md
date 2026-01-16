@@ -23,10 +23,23 @@ This project is done by the  students of DSAI at ETF Sarajevo.
 - [📄 License](#license)
 
 ## 📖 **Overview**
+This project focuses on predicting air pollution levels in Sarajevo at the neighborhood level using machine learning models. To capture different characteristics of the data, we applied a GRU-based time-series model for PM10 prediction and an XGBoost model for PM2.5 prediction. The overall goal is to provide reliable short-term predictions (7-days) that can support air quality monitoring, and are able to inform citizens about AQI and its harmful health-related consequences.
 ## 🌫️ **Problem: Air pollution in Sarajevo**
+Air pollution has been a long-standing issue in Sarajevo, with serious consequences for public health and the environment. The problem is driven by factors such as industrial emissions, heavy traffic, and the city’s geographical location. During winter months, temperature inversions trap pollutants near the ground, often turning Sarajevo into a smog-filled city and significantly worsening air quality.
+
+As a result, Sarajevo is frequently ranked among the most polluted cities in the world, with other cities across Bosnia and Herzegovina facing similar challenges. Prolonged exposure to polluted air poses major health risks, including respiratory and cardiovascular diseases, particularly for vulnerable groups such as children, the elderly, and individuals with pre-existing health conditions.
 ## 🎯 **Our objective**
+The goal of this project is to develop an ML-powered air quality prediction platform capable of forecasting PM2.5 and PM10 levels at the neighborhood level in Sarajevo, with potential future expansion to other cities.
+
+The platform aims to provide personal exposure alerts and health-focused recommendations, helping residents take precautionary measures and supporting actions to improve air quality.
+
 ## 🧩 **Commonly used terms**
 ## 📊 **Dataset choice**
+We used publicly available air quality data from reference monitoring stations located across multiple neighborhoods in Sarajevo (e.g., Otoka, Bjelave, U.S. Embassy, Ilijaš, etc..)
+
+The dataset can be found on this [link](https://aqicn.org/map/sarajevo/)
+We concatenated the datasets of all stations into one large dataset.
+Different station datasets start at different times, but all data end at a common cutoff date of November 19, 2025.
 ## 🧹 **Data preparation & EDA**
 ## 🧠 **Our initial approach**
 ## 📈 **Initial results and evaluation**
