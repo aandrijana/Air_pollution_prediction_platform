@@ -2,13 +2,12 @@
 
 Collaborators: Andrijana Kešelj, Anđela Maksimović and Šehzada Sijarić
 
-This project is done by the  students of DSAI at ETF Sarajevo.
+This project is done by the students of DSAI at ETF Sarajevo.
 
 ## Table of Contents
 - [📖 Overview](#overview)
 - [🌫️ Problem: Air Pollution in Sarajevo](#problem-air-pollution-in-sarajevo)
 - [🎯 Our Objective](#our-objective)
-- [🧩 Commonly Used Terms](#commonly-used-terms)
 - [📊 Dataset Choice](#dataset-choice)
 - [🧹 Data Preparation & EDA](#data-preparation--eda)
 - [🧠 Our Initial Approach](#our-initial-approach)
@@ -33,7 +32,7 @@ The goal of this project is to develop an ML-powered air quality prediction plat
 
 The platform aims to provide personal exposure alerts and health-focused recommendations, helping residents take precautionary measures and supporting actions to improve air quality.
 
-## 🧩 **Commonly used terms**
+
 ## 📊 **Dataset choice**
 We used publicly available air quality data from reference monitoring stations located across multiple neighborhoods in Sarajevo (e.g., Otoka, Bjelave, U.S. Embassy, Ilijaš, etc..)
 
