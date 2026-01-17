@@ -69,8 +69,23 @@ PM2.5 is consistent across the region, while PM10 varies more by location. NO2 a
 The heatmap shows that PM2.5 concentrations are consistently high across all locations, confirming it is a widespread regional issue, while PM10 varies significantly, peaking in the industrial area of Ilijas and dropping at Ivan Sedlo. Notably, the PM2.5 values are consistently higher than PM10.
 
 ## 🧠 **Our initial approach**
-## 📈 **Initial results and evaluation**
+In the initial stage of the project, we explored a wide range of modeling techniques for air quality prediction. We started with simple regression models and Random Forest as baselines, then moved on to more advanced machine learning methods such as XGBoost, Support Vector Regression, and other bagging and boosting approaches.
+
+To better capture temporal patterns, we also experimented with deep learning models, including LSTM and GRU architectures, using different lookback windows (7-day and 14-day), single-step and multi-step forecasting, global and per-station models, and seasonal configurations. Both single-output and multi-output models were tested to compare pollutant-specific training against joint prediction. Additionally, we evaluated different grouping strategies, including:
+
+Per-station models: Training separate models for each monitoring station to capture local patterns.
+
+Global models: Training a single model on combined data from all stations to improve generalization.
+
+Seasonal grouping: Training models for specific seasons (e.g., winter vs summer) to better capture seasonal variation in pollutant behavior.
+
+These experiments helped us identify suitable models for different pollutants and forecasting horizons.
+## 📈 **Initial results and evaluation**  
+The initial results showed clear differences in performance across models and pollutants. Tree-based models, especially XGBoost, performed best for PM2.5, while GRU models achieved stronger results for PM10. When combining these two models, prediction accuracy (measured by MAE) was highest for the first forecast day and gradually decreased from days 2 to 7, which is expected for time-series forecasting.
 ## ⚙️ **Project challenges**
+During model training, we noticed inconsistent results, which led us to review the air quality data sources. We found that the Vijećnica station uses PM2.5 and O₃ data from the Sarajevo Bjelave station, while the U.S. Embassy relies on PM10, NO₂, SO₂, CO, and O₃ measurements from the same location. In addition, the Ilidža station uses CO and O₃ data from the Otoka station. 
+This explains the inconsistencies observed during training.
+Another challenge appeared nearing the end of the project: We  added European air quality standards to the user interface. However, these standards are relatively strict, which means the system rarely reports good AQI values and often classifies the air quality as poor. This explains why the displayed results frequently indicate bad air quality, even when pollutant levels are not extreme.
 ## 🔧 **Improvements**
 ## 🏁 **Final results**
 ## 💻 **Platform development**
