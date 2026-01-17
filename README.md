@@ -61,9 +61,12 @@ When Nitrogen Dioxide (NO2) and Sulfur Dioxide (SO2) levels rise, Particulate Ma
 
 PM2.5​ vs. PM10​: The correlation between the two particle sizes is a moderate 0.50, confirming that while they are related (as PM2.5​ is a subset of PM10​), they are distinct phenomena, with approximately half of the PM10​ variability being explained by PM2.5​ variability.
 <img width="1489" height="590" alt="image" src="https://github.com/user-attachments/assets/ec8d85b2-d47a-4de3-a27a-213c1457662e" />
+
+PM2.5 is consistent across the region, while PM10 varies more by location. NO2 and SO2 are useful predictors because they share combustion sources. Despite sharp winter peaks, overall pollution has gradually declined since 2016
+
 <img width="902" height="590" alt="image" src="https://github.com/user-attachments/assets/cbbc8710-9a8e-4825-b319-dc62395fabad" />
 
-
+The heatmap shows that PM2.5 concentrations are consistently high across all locations, confirming it is a widespread regional issue, while PM10 varies significantly, peaking in the industrial area of Ilijas and dropping at Ivan Sedlo. Notably, the PM2.5 values are consistently higher than PM10.
 
 ## 🧠 **Our initial approach**
 ## 📈 **Initial results and evaluation**
