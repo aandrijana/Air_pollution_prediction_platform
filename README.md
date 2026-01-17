@@ -40,6 +40,27 @@ The dataset can be found on this [link](https://aqicn.org/map/sarajevo/)
 We concatenated the datasets of all stations into one large dataset.
 Different station datasets start at different times, but all data end at a common cutoff date of November 19, 2025.
 ## 🧹 **Data preparation & EDA**
+The dataset underwent a rigorous cleaning pipeline to ensure data quality and suitability for modeling.
+
+Standardization: Converted column names to lowercase and stripped whitespace. Non-standard missing value placeholders (e.g., "NA", "null", "--") were identified and converted to numerical NaN.
+Feature Removal: The CO (Carbon Monoxide) column was dropped entirely. Analysis revealed >40% missing data; imputing such a large volume would have introduced significant noise and bias.
+Feature Engineering: Derived temporal features (Year, Month, Season) from the raw timestamp to enable seasonal analysis.
+
+**EDA observations:**
+Highest PM2.5: US Embassy station.
+Highest PM10: Ilijas station.
+Cleanest: Ivan Sedlo (mountain area) consistently has the best air.
+When Nitrogen Dioxide (NO2) and Sulfur Dioxide (SO2) levels rise, Particulate Matter (PM) usually rises too. Ozone (O3) usually drops when PM gets high.
+<img width="749" height="590" alt="image" src="https://github.com/user-attachments/assets/42683ba6-ce37-4d58-a7b1-f0afe262a90d" />
+PM2.5​ vs. PM10​: The correlation between the two particle sizes is a moderate 0.50, confirming that while they are related (as PM2.5​ is a subset of PM10​), they are distinct phenomena, with approximately half of the PM10​ variability being explained by PM2.5​ variability.
+<img width="1489" height="590" alt="image" src="https://github.com/user-attachments/assets/ec8d85b2-d47a-4de3-a27a-213c1457662e" />
+<img width="902" height="590" alt="image" src="https://github.com/user-attachments/assets/cbbc8710-9a8e-4825-b319-dc62395fabad" />
+
+
+Final dataset after cleaning consists of:
+Total records: 19164
+Date range: 2016-11-07 00:00:00 to 2025-11-19 00:00:00
+Stations: 7
 ## 🧠 **Our initial approach**
 ## 📈 **Initial results and evaluation**
 ## ⚙️ **Project challenges**
