@@ -124,7 +124,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # TITLES
-st.markdown('<h1 class="main-header">🌬️ Sarajevo Air Quality Prediction</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">Sarajevo Air Quality Prediction</h1>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">XGBoost (PM2.5) + GRU (PM10)</div>', unsafe_allow_html=True)
 
 # AQI LOGIC
