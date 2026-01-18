@@ -377,22 +377,8 @@ if st.button("Generate 7-Day Forecast", type="primary"):
                 </div>
             </div>
             """, unsafe_allow_html=True)
-    
-    # Detailed table
-    st.markdown("### 📋 Detailed Forecast")
-    
-    detailed_data = []
-    for pred in predictions:
-        detailed_data.append({
-            'Day': pred['day_name'],
-            'Date': pred['date'].strftime('%d.%m.%Y'),
-            'PM2.5 (µg/m³)': pred['pm25'],
-            'PM10 (µg/m³)': pred['pm10'],
-            'Air Quality': pred['AQI']
-        })
-    
-    df_detailed = pd.DataFrame(detailed_data)
-    st.dataframe(df_detailed, use_container_width=True, hide_index=True)
+
+
     
     # Chart
     st.markdown("### 📊 Pollution Trend Forecast")
