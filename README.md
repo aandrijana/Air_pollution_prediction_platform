@@ -140,6 +140,12 @@ Building on our initial approach, we implemented several key improvements to enh
 - **Average MAE**: 9.8 μg/m³
 - **7-Day Forecast Horizon**: Accuracy decreases by ~2.1 RMSE/day on average
 
+## ** Performance Visualization**
+
+<img width="1255" height="586" alt="download (36)" src="https://github.com/user-attachments/assets/944c4faf-4fc0-462c-a990-536d0804a3b3" />
+
+ThIS plot shows that the predicted values closely follow the actual measurements throughout the observed period, showing very good model performance. The model captures both short-term fluctuations and larger seasonal trends, with only small deviations during sharp peaks and sudden drops. Higher concentrations toward the later months are well reflected in the predictions, suggesting that the model is able to learn temporal patterns effectively. Overall, the high R² value confirms that the model explains most of the variability in the data and provides reliable forecasts for this station
+
 ## **Air Quality Dashboard**
 We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). Rather than serving as a decision-making system, the application functions as a proof of concept,
 illustrating how model outputs can be explored, validated qualitatively, and communicated to users through intuitive visualizations and AQI-based interpretation.
