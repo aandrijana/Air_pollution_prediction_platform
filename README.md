@@ -87,6 +87,37 @@ During model training, we noticed inconsistent results, which led us to review t
 This explains the inconsistencies observed during training.
 Another challenge appeared nearing the end of the project: We  added European air quality standards to the user interface. However, these standards are relatively strict, which means the system rarely reports good AQI values and often classifies the air quality as poor. This explains why the displayed results frequently indicate bad air quality, even when pollutant levels are not extreme.
 ## **Improvements**
+Building on our initial approach, we implemented several key improvements to enhance model accuracy, robustness, and interpretability:
+
+1. **Hybrid Modeling Strategy**  
+   - **PM2.5**: we used XGBoost with 7-day lookback for high interpretability and robustness to outliers  
+   - **PM10**: implemented a 2-layer GRU with 30-day lookback for capturing long-term temporal dependencies  
+   - This leverages each algorithm's strengths for different pollutant characteristics
+
+2. **Advanced Feature Engineering**  
+   - Created time-lagged features (lag1, lag7) and rolling statistics for temporal patterns  
+   - Added cyclical date encoding (sine/cosine of day-of-year) to capture seasonal variations  
+   - Engineered pollutant interaction features (like O₃ inverse relationship)
+
+3. **Log-Residual Transformation for PM10**  
+   - Applied log1p transformation to stabilize variance and reduce outlier impact  
+   - Predicted residuals relative to last observed value rather than absolute concentrations  
+   - This improved model stability and reduced error propagation in multi-day forecasts
+
+4. **Robust Scaling and Regularization**  
+   - Used RobustScaler for PM10 features to handle extreme values  
+   - Implemented dropout layers (0.4→0.3) and L2 regularization in GRU architecture  
+   - Added early stopping and learning rate reduction callbacks
+
+5. **Comprehensive Validation Framework**  
+   - Implemented time-aware splits (70/15/15) respecting temporal order  
+   - Created custom RMSE monitoring callback with model checkpointing  
+   - Generated detailed audit reports with skill scores and hit rates
+
+6. **Enhanced Visualization Dashboard**  
+   - Developed 12-panel dashboard comparing model performance across stations  
+   - Added forecast horizon analysis showing accuracy decay over 7 days  
+   - Included seasonal pattern visualization and feature importance analysis
 
 ## **Final results**
 **PM2.5 (XGBoost) Performance**
