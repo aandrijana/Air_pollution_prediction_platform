@@ -4,94 +4,28 @@ import pandas as pd
 import joblib
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
+import datetime
+
 
 # PAGE CONFIG
 st.set_page_config(
-    page_title="Sarajevo Air Quality Prediction",
+    page_title="Sarajevo Air Quality Predictor",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# CUSTOM CSS
+
+# CUSTOM CSS & STYLES
 st.markdown("""
 <style>
-    .main-header {
-        color: #1E3A8A;
-        text-align: center;
-        padding-bottom: 20px;
-        border-bottom: 3px solid #3B82F6;
-        margin-bottom: 30px;
-    }
-    
-    .sub-header {
-        font-size: 1.2rem;
-        text-align: center;
-        color: #6b7280;
-        margin-bottom: 2rem;
-    }
-    
-    .info-box {
-        background: linear-gradient(135deg, #E0F2FE 0%, #DBEAFE 100%);
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 5px solid #3B82F6;
-        margin: 20px 0;
-        color: #1E40AF;
-        font-size: 16px;
-        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);
-    }
-    
-    .prediction-day {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #E2E8F0;
-        margin: 5px;
-        text-align: center;
-        height: 100%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    .day-header {
-        color: #1E3A8A;
-        font-weight: bold;
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-    
-    .metric-value {
-        color: #2563EB;
-        font-weight: bold;
-        font-size: 20px;
-        margin: 5px 0;
-    }
-    
-    .metric-label {
-        color: #64748B;
-        font-size: 12px;
-        margin-bottom: 3px;
-    }
-    
-    .level-badge {
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 11px;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 8px;
-        display: inline-block;
-        color: white;
-    }
-    
-    .metric-box {
-        padding: 1.5rem;
-        border-radius: 1rem;
-        text-align: center;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: white;
-    }
+    .main-header { color: #1E3A8A; text-align: center; padding-bottom: 20px; border-bottom: 3px solid #3B82F6; margin-bottom: 30px; }
+    .sub-header { font-size: 1.2rem; text-align: center; color: #6b7280; margin-bottom: 2rem; }
+    .info-box { background: linear-gradient(135deg, #E0F2FE 0%, #DBEAFE 100%); padding: 20px; border-radius: 15px; border-left: 5px solid #3B82F6; margin: 20px 0; color: #1E40AF; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1); }
+    .prediction-day { background: white; padding: 10px; border-radius: 10px; border: 1px solid #E2E8F0; margin: 3px; text-align: center; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .day-header { color: #1E3A8A; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+    .metric-value { color: #2563EB; font-weight: bold; font-size: 20px; margin: 5px 0; }
+    .metric-label { color: #64748B; font-size: 12px; margin-bottom: 3px; }
+    .level-badge { padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; text-align: center; margin-top: 8px; display: inline-block; color: white; width: 100%; }
     
     .good { background: #22c55e; }
     .moderate { background: #eab308; }
@@ -100,84 +34,44 @@ st.markdown("""
     .very-unhealthy { background: #a855f7; }
     .hazardous { background: #37055e; }
     
-    .aqi-scale th, .aqi-scale td {
-        padding: 0.5rem;
-        text-align: left;
-    }
-    
-    .aqi-scale th {
-        background: #000000;
-    }
-    
-    .stButton > button {
-        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-        color: white;
-        border: none;
-        padding: 12px 28px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 16px;
-        transition: all 0.3s;
-        width: 100%;
-    }
+    .aqi-scale { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    .aqi-scale th, .aqi-scale td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
 </style>
 """, unsafe_allow_html=True)
 
-# TITLES
-st.markdown('<h1 class="main-header">Sarajevo Air Quality Prediction</h1>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">XGBoost (PM2.5) + GRU (PM10)</div>', unsafe_allow_html=True)
 
-# AQI LOGIC
+# AQI LOGIC & SCALE
+COLOR_LEVELS = [
+    {"name": "Good", "hex": "#22c55e", "p25": "0-15", "p10": "0-50"},
+    {"name": "Moderate", "hex": "#eab308", "p25": "16-35", "p10": "51-100"},
+    {"name": "Poor / USG", "hex": "#f97316", "p25": "36-75", "p10": "101-150"},
+    {"name": "Unhealthy", "hex": "#ef4444", "p25": "76-150", "p10": "151-250"},
+    {"name": "Very Unhealthy", "hex": "#a855f7", "p25": "151-250", "p10": "251-350"},
+    {"name": "Hazardous", "hex": "#37055e", "p25": ">250", "p10": ">350"}
+]
+
 def get_aqi_category(pm25, pm10):
     categories = [
         ("Good", 0, 15, 0, 50, "good"),
         ("Moderate", 16, 35, 51, 100, "moderate"),
-        ("Poor / USG", 36, 75, 101, 150, "usg"),
+        ("Poor", 36, 75, 101, 150, "usg"),
         ("Unhealthy", 76, 150, 151, 250, "unhealthy"),
         ("Very Unhealthy", 151, 250, 251, 350, "very-unhealthy"),
-        ("Hazardous / Extreme", 251, 1e9, 351, 1e9, "hazardous")
+        ("Hazardous", 251, 1e9, 351, 1e9, "hazardous")
     ]
-
-    pm25_idx = pm10_idx = 0
-    for i, (_, p25_lo, p25_hi, p10_lo, p10_hi, _) in enumerate(categories):
-        if p25_lo <= pm25 <= p25_hi: pm25_idx = i
-        if p10_lo <= pm10 <= p10_hi: pm10_idx = i
-
-    idx = max(pm25_idx, pm10_idx)
+    p25_idx = next((i for i, c in enumerate(categories) if c[1] <= pm25 <= c[2]), 5)
+    p10_idx = next((i for i, c in enumerate(categories) if c[3] <= pm10 <= c[4]), 5)
+    idx = max(p25_idx, p10_idx)
     return categories[idx][0], categories[idx][5]
 
-COLOR_LEVELS = [
-    {"name": "Good", "hex": "#22c55e"},
-    {"name": "Moderate", "hex": "#eab308"},
-    {"name": "Poor / USG", "hex": "#f97316"},
-    {"name": "Unhealthy", "hex": "#ef4444"},
-    {"name": "Very Unhealthy", "hex": "#a855f7"},
-    {"name": "Hazardous", "hex": "#37055e"}
-]
-
 def create_color_bar():
-    """Create color scale visualization"""
-    colors = [level['hex'] for level in COLOR_LEVELS]
-    labels = [level['name'] for level in COLOR_LEVELS]
-    
-    html = """
-    <div style="height: 25px; border-radius: 12px; overflow: hidden; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="display: flex; height: 100%;">
-    """
-    
-    for color in colors:
-        html += f'<div style="flex: 1; background: {color};"></div>'
-    
-    html += """
-        </div>
-    </div>
-    <div style="display: flex; justify-content: space-between;">
-    """
-    
-    for label in labels:
-        html += f'<div style="font-size: 10px; text-align: center; margin-top: 5px; color: #475569; font-weight: 500;">{label}</div>'
-    
-    html += "</div>"
+    html = '<div style="height: 20px; border-radius: 10px; overflow: hidden; display: flex; margin-bottom: 10px;">'
+    for level in COLOR_LEVELS:
+        html += f'<div style="flex: 1; background: {level["hex"]};"></div>'
+    html += '</div><div style="display: flex; justify-content: space-between;">'
+    for level in COLOR_LEVELS:
+        html += f'<div style="font-size: 10px; color: #475569; font-weight: 600;">{level["name"]}</div>'
+    html += '</div>'
     return html
 
 # DATA LOADING
@@ -187,84 +81,33 @@ def load_data():
     df["date"] = pd.to_datetime(df["date"])
     return df
 
-df = load_data()
+df_master = load_data()
+
 
 # SIDEBAR
 st.sidebar.header("Prediction Settings")
-stations = sorted(df["station"].unique())
+stations = sorted(df_master["station"].unique())
 station = st.sidebar.selectbox("Select Station", stations)
-
-# FILTER DATA
-station_df = df[df["station"] == station].sort_values("date")
-if len(station_df) < 40:
-    st.error("Not enough historical data for this station.")
-    st.stop()
-
-# STATION INFO BOX
-last_date = station_df["date"].max().date()
-first_date = station_df["date"].min().date()
-total_records = len(station_df)
-
-st.markdown(f"""
-<div class='info-box'>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h3 style="margin: 0; color: #1E3A8A;">Station Information</h3>
-            <p style="margin: 5px 0 0 0; color: #475569;">
-                Station: <strong>{station}</strong><br>
-                Data Range: <strong>{first_date.strftime('%d.%m.%Y')} - {last_date.strftime('%d.%m.%Y')}</strong><br>
-                Total Records: <strong>{total_records}</strong><br>
-                Models: <strong>XGBoost (PM2.5) + GRU (PM10)</strong>
-            </p>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+station_df = df_master[df_master["station"] == station].sort_values("date")
 
 
-# COLOR SCALE
-st.markdown("### Air Quality Level Scale (Sarajevo Context)")
-st.markdown(create_color_bar(), unsafe_allow_html=True)
+# MODELS LOADING
+@st.cache_resource
+def load_all_models(st_name):
+    xgb_m = joblib.load(f"models_xgb/xgboost_model_{st_name}.pkl")
+    xgb_xs = joblib.load(f"models_xgb/xgb_X_scaler_{st_name}.pkl")
+    xgb_ys = joblib.load(f"models_xgb/xgb_y_scaler_{st_name}.pkl")
+    gru_m = load_model(f"models_gru/pm10_model_{st_name}.keras")
+    gru_s = joblib.load(f"models_gru/scaler_{st_name}.pkl")
+    return xgb_m, xgb_xs, xgb_ys, gru_m, gru_s
 
-# AQI SCALE TABLE
-with st.expander("📊 Detailed Air Quality Thresholds", expanded=False):
-    st.markdown("""
-    <table class="aqi-scale">
-    <tr>
-    <th>Category</th><th>PM2.5 (µg/m³)</th><th>PM10 (µg/m³)</th><th>Context</th>
-    </tr>
-    <tr class="good"><td> Good</td><td>0–15</td><td>0–50</td><td>Rare in winter; typical clean air days</td></tr>
-    <tr class="moderate"><td> Moderate</td><td>16–35</td><td>51–100</td><td>Common autumn/spring level</td></tr>
-    <tr class="usg"><td> Poor/USG</td><td>36–75</td><td>101–150</td><td>Often seen during smog episodes</td></tr>
-    <tr class="unhealthy"><td> Unhealthy</td><td>76–150</td><td>151–250</td><td>Frequent winter peaks; health effects for most people</td></tr>
-    <tr class="very-unhealthy"><td> Very Unhealthy</td><td>151–250</td><td>251–350</td><td>Severe pollution; authorities warn staying indoors</td></tr>
-    <tr class="hazardous"><td> Hazardous/Extreme</td><td>>250</td><td>>350</td><td>Episode conditions seen in Sarajevo's worst events</td></tr>
-    </table>
-    """, unsafe_allow_html=True)
-
-# DISPLAY RECENT HISTORY
-with st.expander("📈 Recent Observations (Last 7 Days)", expanded=True):
-    recent_data = station_df[["date", "pm25", "pm10", "o3", "no2", "so2"]].tail(7).copy()
-    recent_data['date'] = recent_data['date'].dt.strftime('%d.%m.%Y')
-    st.dataframe(recent_data, use_container_width=True, hide_index=True)
-
-# LOAD MODELS
 try:
-    # XGBoost (PM2.5)
-    xgb_model = joblib.load(f"models_xgb/xgboost_model_{station}.pkl")
-    xgb_X_scaler = joblib.load(f"models_xgb/xgb_X_scaler_{station}.pkl")
-    xgb_y_scaler = joblib.load(f"models_xgb/xgb_y_scaler_{station}.pkl")
-
-    # GRU (PM10)
-    gru_model = load_model(f"models_gru/pm10_model_{station}.keras")
-    gru_scaler = joblib.load(f"models_gru/scaler_{station}.pkl")
-    
-    st.sidebar.success(f"Models loaded for {station}")
+    xgb_model, xgb_X_scaler, xgb_y_scaler, gru_model, gru_scaler = load_all_models(station)
 except Exception as e:
-    st.error(f"Error loading models: {e}")
+    st.error(f"Models for {station} could not be found.")
     st.stop()
 
-# FEATURE ENGINEERING
+# FORECAST LOGIC
 def add_gru_features(df):
     d = df.copy()
     d["pm25_lag1"] = d["pm25"].shift(1)
@@ -275,199 +118,107 @@ def add_gru_features(df):
     d["o3_inverse"] = 1/(d["o3"]+1)
     return d.dropna()
 
-# 7-DAY FORECAST FUNCTION
-def predict_7_days(station_df, xgb_model, xgb_X_scaler, xgb_y_scaler,
-                    gru_model, gru_scaler):
-    df = station_df.copy()
-    features_gru = [
-        "pm25","o3","no2","so2","pm10",
-        "pm25_lag1","pm25_lag7","pm25_roll7_mean",
-        "doy_sin","doy_cos","o3_inverse"
-    ]
+def predict_7_days(input_df, xgb_m, xgb_xs, xgb_ys, gru_m, gru_s):
+    features_gru = ["pm25","o3","no2","so2","pm10","pm25_lag1","pm25_lag7","pm25_roll7_mean","doy_sin","doy_cos","o3_inverse"]
+    
+    # 1. PM10 - GRU 
+    gru_prep = add_gru_features(input_df)
+    X_seq = gru_prep[features_gru].tail(30).values
+    X_scaled = gru_s.transform(X_seq).reshape(1, 30, len(features_gru))
+    
+    gru_residuals = gru_m.predict(X_scaled, verbose=0)[0] 
+    last_pm10_log = np.log1p(input_df["pm10"].iloc[-1])
+    pm10_forecast = np.expm1(last_pm10_log + gru_residuals)
 
-    preds = []
+    # 2. PM2.5 - XGBoost 
+    pm25_forecast = []
+    temp_df = input_df.copy()
+    numeric_cols = input_df.select_dtypes(include=["int64", "float64"]).columns
 
     for i in range(7):
-        # PM2.5 — XGBoost
-        numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns
-        xgb_window = df[numeric_cols].tail(7).values
-        xgb_scaled = xgb_X_scaler.transform(xgb_window)
-        xgb_input = xgb_scaled.flatten().reshape(1, -1)
-        pm25_scaled = xgb_model.predict(xgb_input)
-        pm25_pred = xgb_y_scaler.inverse_transform(pm25_scaled.reshape(-1,1))[0,0]
-
-        # PM10 — GRU
-        gru_df = add_gru_features(df)
-        X_seq = gru_df[features_gru].tail(30).values
-        X_scaled = gru_scaler.transform(X_seq).reshape(1,30,len(features_gru))
-        residuals = gru_model.predict(X_scaled, verbose=0)
-        last_log = np.log1p(gru_df["pm10"].iloc[-1])
-        pm10_pred = np.expm1(last_log + residuals[0,0])
-
-        # Date for prediction
-        next_date = df["date"].max() + pd.Timedelta(days=1)
-
-        # Append prediction to df for next iteration
-        new_row = {
-            "date": next_date,
-            "pm25": round(pm25_pred, 2),
-            "pm10": round(pm10_pred, 2),
-            "o3": df["o3"].iloc[-1],
-            "no2": df["no2"].iloc[-1],
-            "so2": df["so2"].iloc[-1]
-        }
-        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-
-        # AQI category
-        category, css = get_aqi_category(pm25_pred, pm10_pred)
+        xgb_window = temp_df[numeric_cols].tail(7).values
+        xgb_in = xgb_xs.transform(xgb_window).flatten().reshape(1, -1)
+        p25_scaled = xgb_m.predict(xgb_in)
+        p25_val = xgb_ys.inverse_transform(p25_scaled.reshape(-1,1))[0,0]
+        pm25_forecast.append(p25_val)
         
-        # Get color for display
-        color_map = {
-            "good": "#22c55e",
-            "moderate": "#eab308",
-            "usg": "#f97316",
-            "unhealthy": "#ef4444",
-            "very-unhealthy": "#a855f7",
-            "hazardous": "#37055e"
-        }
+        new_row = temp_df.iloc[-1:].copy()
+        new_row["pm25"] = p25_val
+        new_row["pm10"] = pm10_forecast[i]
+        new_row["date"] = temp_df["date"].max() + pd.Timedelta(days=1)
+        temp_df = pd.concat([temp_df, new_row], ignore_index=True)
 
-        preds.append({
-            "date": next_date.date(),
-            "day_name": next_date.strftime('%A'),
-            "day_short": next_date.strftime('%a'),
-            "pm25": round(pm25_pred, 1),
-            "pm10": round(pm10_pred, 1),
-            "AQI": category,
-            "color": color_map.get(css, "#6b7280")
+    # 3. Format Output
+    results = []
+    color_map = {"good": "#22c55e", "moderate": "#eab308", "usg": "#f97316", "unhealthy": "#ef4444", "very-unhealthy": "#a855f7", "hazardous": "#37055e"}
+    for i in range(7):
+        target_date = input_df["date"].max() + pd.Timedelta(days=i+1)
+        cat, css = get_aqi_category(pm25_forecast[i], pm10_forecast[i])
+        results.append({
+            "date": target_date, "pm25": pm25_forecast[i], "pm10": pm10_forecast[i],
+            "AQI": cat, "color": color_map.get(css, "#6b7280"), "day_short": target_date.strftime('%a')
         })
+    return results
 
-    return preds
+# MAIN DASHBOARD
+st.markdown('<h1 class="main-header">Sarajevo Air Quality Predictor</h1>', unsafe_allow_html=True)
 
-# 7-DAY FORECAST
+# Pretty Color Bar
+st.markdown("### Air Quality Scale")
+st.markdown(create_color_bar(), unsafe_allow_html=True)
+
+# Station Summary
+st.markdown(f"""
+<div class='info-box'>
+    <b>Monitoring Station:</b> {station} <br>
+    <b>Database Status:</b> Records up to {station_df['date'].max().strftime('%d.%B %Y')}
+</div>
+""", unsafe_allow_html=True)
+
+# Threshold Table 
+with st.expander("📊 View Detailed Pollutant Thresholds"):
+    html_table = '<table class="aqi-scale"><tr><th>Category</th><th>PM2.5</th><th>PM10</th></tr>'
+    for l in COLOR_LEVELS:
+        html_table += f'<tr style="color: {l["hex"]}; font-weight: bold;"><td>{l["name"]}</td><td>{l["p25"]}</td><td>{l["p10"]}</td></tr>'
+    html_table += '</table>'
+    st.markdown(html_table, unsafe_allow_html=True)
+
+# FORECAST SECTION
 st.markdown("---")
-st.markdown("### 7-Day Air Quality Forecast")
-
-if st.button("Generate 7-Day Forecast", type="primary"):
-    with st.spinner("Generating predictions..."):
-        predictions = predict_7_days(station_df, xgb_model, xgb_X_scaler, xgb_y_scaler,
-                                     gru_model, gru_scaler)
+if st.button("Generate 7-Day Forecast", type="primary", use_container_width=True):
+    with st.spinner("Calculating atmospheric residuals..."):
+        preds = predict_7_days(station_df, xgb_model, xgb_X_scaler, xgb_y_scaler, gru_model, gru_scaler)
     
-    st.success("Forecast generated successfully!")
-    
-    # Display predictions in columns
+    # Grid of Cards
     cols = st.columns(7)
-    
-    for idx, (pred, col) in enumerate(zip(predictions, cols)):
+    for idx, (p, col) in enumerate(zip(preds, cols)):
         with col:
-            day_num = idx + 1
-            day_prefix = "Tomorrow" if day_num == 1 else f"Day {day_num}"
-            
             st.markdown(f"""
             <div class="prediction-day">
-                <div class="day-header">{pred['day_short']}<br><small>{day_prefix}</small></div>
-                <div style="color: #64748B; font-size: 11px; margin: 5px 0;">
-                    {pred['date'].strftime('%d.%m.')}
-                </div>
-                <div class="metric-label">PM2.5</div>
-                <div class="metric-value">{pred['pm25']:.2f}<small>µg/m³</small></div>
-                <div class="metric-label">PM10</div>
-                <div class="metric-value">{pred['pm10']:.2f}<small>µg/m³</small></div>
-                <div class="level-badge" style="background-color: {pred['color']};">
-                    {pred['AQI']}
-                </div>
+                <div class="day-header">{p['day_short']}<br>{p['date'].strftime('%d.%m')}</div>
+                <div class="metric-label">PM2.5</div><div class="metric-value">{p['pm25']:.1f}</div>
+                <div class="metric-label">PM10</div><div class="metric-value">{p['pm10']:.1f}</div>
+                <div class="level-badge" style="background-color: {p['color']};">{p['AQI']}</div>
             </div>
             """, unsafe_allow_html=True)
 
+    # Trend Chart
+    st.markdown("### 📊 Trend Analysis")
+    c_df = pd.DataFrame(preds).set_index("date")
+    st.line_chart(c_df[["pm25", "pm10"]])
 
-    
-    # Chart
-    st.markdown("### 📊 Pollution Trend Forecast")
-    
-    fig, ax = plt.subplots(figsize=(10, 4))
-    
-    days = [p['day_short'] for p in predictions]
-    pm25_vals = [p['pm25'] for p in predictions]
-    pm10_vals = [p['pm10'] for p in predictions]
-    
-    x = range(len(days))
-    
-    ax.plot(x, pm25_vals, marker='o', linewidth=2, color='#3B82F6', label='PM2.5')
-    ax.plot(x, pm10_vals, marker='s', linewidth=2, color='#1E40AF', label='PM10')
-    
-    ax.set_xlabel('Day', fontsize=12, color='#1E3A8A')
-    ax.set_ylabel('Concentration (µg/m³)', fontsize=12, color='#1E3A8A')
-    ax.set_xticks(x)
-    ax.set_xticklabels(days)
-    ax.set_title(f'7-Day Forecast for {station}', fontsize=14, color='#1E3A8A')
-    ax.legend(loc='upper right')
-    ax.grid(True, alpha=0.2)
-    ax.set_facecolor('#F8FAFC')
-    
-    plt.tight_layout()
-    st.pyplot(fig)
-
-# CUSTOM DATE PREDICTION
+# HISTORICAL SECTION
 st.markdown("---")
-st.markdown("### 📅 Explore Model Predictions for Past Dates")
-
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    prediction_date = st.date_input(
-        "Select prediction date",
-        value=station_df["date"].max().date(),
-        min_value=station_df["date"].min().date(),
-        max_value=station_df["date"].max().date()
-    )
-
-with col2:
-    st.write("")
-    st.write("")
-    predict_custom = st.button("🔮 Predict Air Quality")
-
-if predict_custom:
-    # Filter historical data up to selected date
-    df_hist = station_df[station_df["date"] < pd.to_datetime(prediction_date)]
-    if len(df_hist) < 40:
-        st.error("Not enough historical data before this date.")
+st.markdown("### 📅 Past Performance Explorer")
+h_date = st.date_input("Select a historical date to see model performance:", station_df["date"].max().date())
+if st.button("Check Model Recall"):
+    h_df = station_df[station_df["date"] < pd.to_datetime(h_date)]
+    if len(h_df) >= 40:
+        res = predict_7_days(h_df, xgb_model, xgb_X_scaler, xgb_y_scaler, gru_model, gru_scaler)[0]
+        st.metric("Model Predicted PM2.5", f"{res['pm25']:.2f} µg/m³")
+        st.metric("Model Predicted PM10", f"{res['pm10']:.2f} µg/m³")
+        st.write(f"Health Risk Assessment: **{res['AQI']}**")
     else:
-        with st.spinner("Generating prediction..."):
-            # PM2.5 — XGBoost
-            numeric_cols = df_hist.select_dtypes(include=["int64", "float64"]).columns
-            xgb_window = df_hist[numeric_cols].tail(7).values
-            xgb_scaled = xgb_X_scaler.transform(xgb_window)
-            xgb_input = xgb_scaled.flatten().reshape(1, -1)
-            pm25_scaled = xgb_model.predict(xgb_input)
-            pm25_pred = xgb_y_scaler.inverse_transform(pm25_scaled.reshape(-1,1))[0,0]
+        st.warning("Insufficient data historical window for this date.")
 
-            # PM10 — GRU
-            gru_df = add_gru_features(df_hist)
-            features_gru = [
-                "pm25","o3","no2","so2","pm10",
-                "pm25_lag1","pm25_lag7","pm25_roll7_mean",
-                "doy_sin","doy_cos","o3_inverse"
-            ]
-            X_seq = gru_df[features_gru].tail(30).values
-            X_scaled = gru_scaler.transform(X_seq).reshape(1,30,len(features_gru))
-            residuals = gru_model.predict(X_scaled, verbose=0)
-            last_log = np.log1p(gru_df["pm10"].iloc[-1])
-            pm10_pred = np.expm1(last_log + residuals[0,0])
-
-            # AQI
-            category, css = get_aqi_category(pm25_pred, pm10_pred)
-
-        # DISPLAY
-        st.success("Prediction complete!")
-        st.markdown(f"""
-        <div class="metric-box {css}">
-            {category}<br>{prediction_date.strftime('%d.%m.%Y')}
-        </div>
-        """, unsafe_allow_html=True)
-
-        c1, c2 = st.columns(2)
-        c1.metric("PM2.5 (µg/m³)", f"{pm25_pred:.2f}")
-        c2.metric("PM10 (µg/m³)", f"{pm10_pred:.2f}")
-
-# FOOTER
-st.markdown("---")
-st.caption(f"Sarajevo Air Quality Prediction • {station} • XGBoost + GRU Models • 2018–2025")
+st.caption("Causal AI • Sarajevo AQI Framework • 2018–2026")
