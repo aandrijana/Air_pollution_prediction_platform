@@ -369,9 +369,9 @@ if st.button("Generate 7-Day Forecast", type="primary"):
                     {pred['date'].strftime('%d.%m.')}
                 </div>
                 <div class="metric-label">PM2.5</div>
-                <div class="metric-value">{pred['pm25']}<small>µg/m³</small></div>
+                <div class="metric-value">{pred['pm25']:.2f}<small>µg/m³</small></div>
                 <div class="metric-label">PM10</div>
-                <div class="metric-value">{pred['pm10']}<small>µg/m³</small></div>
+                <div class="metric-value">{pred['pm10']:.2f}<small>µg/m³</small></div>
                 <div class="level-badge" style="background-color: {pred['color']};">
                     {pred['AQI']}
                 </div>
