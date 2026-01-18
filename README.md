@@ -88,8 +88,9 @@ Another challenge appeared nearing the end of the project: We  added European ai
 ## 🔧 **Improvements**
 ## 🏁 **Final results**
 ## 💻 **Air Quality Dashboard**
-We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). This dashboard serves as a proof of concept, demonstrating how predictive models can be applied to real data and communicated through intuitive, interactive visualizations.
-## [View the Air Quality Dashboard](https://airpollutionpredictionplatform-agbkast8wmll8pc6ntzhrk.streamlit.app/) 
+We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). Rather than serving as a decision-making system, the application functions as a proof of concept,
+illustrating how model outputs can be explored, validated qualitatively, and communicated to users through intuitive visualizations and AQI-based interpretation.
+### [Go to Air Quality Dashboard](https://airpollutionpredictionplatform-agbkast8wmll8pc6ntzhrk.streamlit.app/) 
 
 ## 🔮 **Conclusion and future steps**
 ## 📚 **References**
