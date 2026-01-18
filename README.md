@@ -95,7 +95,8 @@ Another challenge appeared nearing the end of the project: We  added European ai
 - **Worst Station**: Ivan Sedlo (R² = 0.691, RMSE = 24.99)
 - **Average RMSE**: 18.4 μg/m³
 - **Average MAE**: 12.4 μg/m³
-**Performance Categories:**
+
+**Performance Categories for PM2.5:**
 - **Excellent (R² > 0.9)**: Ilidza, Otoka
 - **Good (0.8 < R² ≤ 0.9)**: Bjelave, US Embassy, Vijecnica
 - **Moderate (R² ≤ 0.8)**: Ilijas, Ivan Sedlo
