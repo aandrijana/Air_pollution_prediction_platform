@@ -310,8 +310,8 @@ def predict_7_days(station_df, xgb_model, xgb_X_scaler, xgb_y_scaler,
         # Append prediction to df for next iteration
         new_row = {
             "date": next_date,
-            "pm25": pm25_pred,
-            "pm10": pm10_pred,
+            "pm25": round(pm25_pred, 2),
+            "pm10": round(pm10_pred, 2),
             "o3": df["o3"].iloc[-1],
             "no2": df["no2"].iloc[-1],
             "so2": df["so2"].iloc[-1]
