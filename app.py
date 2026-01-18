@@ -465,8 +465,8 @@ if predict_custom:
         """, unsafe_allow_html=True)
 
         c1, c2 = st.columns(2)
-        c1.metric("PM2.5 (µg/m³)", f"{pm25_pred:.1f}")
-        c2.metric("PM10 (µg/m³)", f"{pm10_pred:.1f}")
+        c1.metric("PM2.5 (µg/m³)", f"{pm25_pred:.2f}")
+        c2.metric("PM10 (µg/m³)", f"{pm10_pred:.2f}")
 
 # FOOTER
 st.markdown("---")
