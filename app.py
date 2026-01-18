@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 # PAGE CONFIG
 st.set_page_config(
     page_title="Sarajevo Air Quality Prediction",
-    page_icon="🌬️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -346,7 +345,7 @@ def predict_7_days(station_df, xgb_model, xgb_X_scaler, xgb_y_scaler,
 
 # 7-DAY FORECAST
 st.markdown("---")
-st.markdown("### 🔮 7-Day Air Quality Forecast")
+st.markdown("### 7-Day Air Quality Forecast")
 
 if st.button("Generate 7-Day Forecast", type="primary"):
     with st.spinner("Generating predictions..."):
