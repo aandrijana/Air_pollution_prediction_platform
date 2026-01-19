@@ -157,7 +157,6 @@ The plot shows the actual and predicted  PM2.5 pollutant values for Ilidža over
 
 The residual distribution is centered around zero, indicating that the model’s predictions are generally unbiased with most errors being small. However, the distribution has slightly heavier tails, meaning that larger errors still occur occasionally, especially during extreme pollution events. Overall, this pattern shows that the model performs well in general but is less precise when predicting sudden or unusually high concentration changes, which is not that surprising. 
 
-Lastly, 
 
 ## **Air Quality Dashboard**
 We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). Rather than serving as a decision-making system, the application functions as a proof of concept,
