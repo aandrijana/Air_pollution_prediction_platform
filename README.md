@@ -144,6 +144,7 @@ Building on our initial approach, we implemented several key improvements to enh
 ## **Performance Visualization**
 
 In this section we will analyze some of the graphs that show the model’s performance and how accurately it predicts air quality.
+
 <img width="996" height="687" alt="download (40)" src="https://github.com/user-attachments/assets/42b340e8-5ad8-4ee6-8a7c-cb07bb0a0c9d" />
 Firstly, let's take a look at the comparison of model performance across monitoring stations. The plot shows that the XGBoost model for PM2.5 prediction consistently achieves high accuracy, with R² values ranging from approximately 0.69 to 0.96. The strongest performance is observed at the Ilidza station, followed closely by Otoka, Bjelave, and the US Embassy, which means that PM2.5 concentrations are captured effectively and robustly across most locations. In contrast, the GRU model for PM10 prediction demonstrates substantially lower and more variable performance, with moderate R² values at stations such as Ilidza, Otoka, and Ilijas, but very weak predictive capability at Vjecenica and Ivan Sedlo. This pronounced performance gap suggests that PM10 dynamics are more complex
 
@@ -155,6 +156,8 @@ The plot shows the actual and predicted  PM2.5 pollutant values for Ilidža over
 <img width="1006" height="687" alt="download (37)" src="https://github.com/user-attachments/assets/19a88519-efd1-4087-99aa-5c0c5e651cda" />
 
 The residual distribution is centered around zero, indicating that the model’s predictions are generally unbiased with most errors being small. However, the distribution has slightly heavier tails, meaning that larger errors still occur occasionally, especially during extreme pollution events. Overall, this pattern shows that the model performs well in general but is less precise when predicting sudden or unusually high concentration changes, which is not that surprising. 
+
+Lastly, 
 
 ## **Air Quality Dashboard**
 We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). Rather than serving as a decision-making system, the application functions as a proof of concept,
