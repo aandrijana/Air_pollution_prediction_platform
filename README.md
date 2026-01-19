@@ -162,6 +162,43 @@ The residual distribution is centered around zero, indicating that the model’s
 We developed a web-based air quality dashboard using Streamlit, combining an XGBoost model for PM2.5 and a GRU model for PM10 into a single interactive interface. The application allows users to explore historical data, generate forecasts, and interpret air quality using a Sarajevo-specific [AQI scale](https://www.iqair.com/newsroom/what-is-aqi). Rather than serving as a decision-making system, the application functions as a proof of concept,
 illustrating how model outputs can be explored, validated qualitatively, and communicated to users through intuitive visualizations and AQI-based interpretation.
 ### [Go to Air Quality Dashboard](https://airpollutionpredictionplatform-agbkast8wmll8pc6ntzhrk.streamlit.app/) 
+### **Installation and Local Setup**
+   **1. Clone the Repository**
+   ```
+   git clone https://github.com/aandrijana/Air_pollution_prediction_platform.git
+   cd Air_pollution_prediction_platform
+   ```
+   
+   **2. Set Up a Virtual Environment**
+   Create the environment <br>
+   `python -m venv venv` <br>
+   
+   Activate (Windows)<br>
+   `venv\Scripts\activate` 
+   
+   Activate (macOS/Linux) <br>
+   `source venv/bin/activate`
+   
+   **3. Install Required Libraries** <br>
+   `pip install -r requirements.txt`
+   
+   **4. Run the Application** <br>
+   `streamlit run app.py` <br>
+   
+   **Ensure Project Structure!** 
+   ```
+   . 
+   ├── app.py
+   ├── requirements.txt
+   ├── dataset/
+   │   └── aqi_dataset_processed.csv
+   ├── models_gru/
+   │   ├── *.keras
+   │   └── scalers
+   ├── models_xgb/
+   │   ├── *.pkl
+   │   └── scalers
+   ```
 
 ## **Conclusion and future steps**
 Overall, the models are performing very well, but there is still room to improve and make the system more useful in real life. The next steps focus on improving features, making the dashboard real-time, and automating updates.
