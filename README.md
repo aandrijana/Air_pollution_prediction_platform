@@ -164,6 +164,19 @@ illustrating how model outputs can be explored, validated qualitatively, and com
 ### [Go to Air Quality Dashboard](https://airpollutionpredictionplatform-agbkast8wmll8pc6ntzhrk.streamlit.app/) 
 
 ## **Conclusion and future steps**
+Overall, the models are performing very well, but there is still room to improve and make the system more useful in real life. The next steps focus on improving features, making the dashboard real-time, and automating updates.
+
+Next Steps:
+
+Feature Engineering
+Add seasonal and weather-related features (like temperature, humidity, wind) to help the model better understand air quality patterns.
+
+Update the Web Dashboard
+Improve the dashboard so it shows real-time predictions and sends alerts when pollution levels are high.
+
+Monitoring & Automation
+Set up a pipeline that automatically updates data and retrains the model regularly so the predictions stay accurate.
+
 ## **References**
 Zolota, E., Hasić, V., Mević, A., Delić, A. & Krivić, S., 2024. Predictive Analysis of Sarajevo’s
 AQI using Machine Learning Models for Varied Data Granularity and Prediction Windows. In:
