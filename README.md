@@ -158,26 +158,25 @@ Zolota, E., Hasić, V., Mević, A., Delić, A. & Krivić, S., 2024. Predictive A
 AQI using Machine Learning Models for Varied Data Granularity and Prediction Windows. In:
 2024 47th MIPRO ICT and Electronics Convention (MIPRO). IEEE, pp.1109–1114. [1](https://www.researchgate.net/publication/381818848_Predictive_Analysis_of_Sarajevo's_AQI_using_Machine_Learning_Models_for_Varied_Data_Granularity_and_Prediction_Windows)
 
-Bekkar, A., Hssina, B., Douzi, S. & Douzi, K., 2021. Air-pollution prediction in smart city, deep
-learning approach. Journal of Big Data, 8(1), p.161. [2](https://link.springer.com/article/10.1186/s40537-021-00548-1)
-
-Thapa, I., Devkota, B., Lamichhane, B.R., Devkota, B.P., Dhakal, R. & Horanont, T., 2025.
-Applying Deep Learning and Machine Learning Algorithms to Estimate PM2.5 Concentration Using
-Satellite Data and Meteorological Data. IEEE Journal of Selected Topics in Applied Earth
-Observations and Remote Sensing. [3](https://www.researchgate.net/publication/396549656_Applying_Deep_Learning_and_Machine_Learning_Algorithms_to_Estimate_PM_25_Concentration_Using_Satellite_Data_and_Meteorological_Data)
-
-Chennareddy, S., Saha, S., Das, A. & Kayal, T., 2024. PM2.5 Concentration Forecasting in the
-Kolkata Region With Spatiotemporal Sliding Window Approaches. IEEE Access, 12,
-pp.82333–82353. [4](https://ieeexplore.ieee.org/abstract/document/10552267/)
-
-Mazza, A., Guarino, G., Scarpa, G., Yuan, Q. & Vivone, G., 2025. PM2.5 retrieval with
-Sentinel-5P data over Europe exploiting deep learning. IEEE Transactions on Geoscience and Remote
-Sensing. [5](https://www.researchgate.net/publication/390287974_PM25_Retrieval_with_Sentinel-5P_Data_over_Europe_Exploiting_Deep_Learning)
-
 Salcedo-Bosch, A., Zong, L., Yang, Y., Cohen, J.B. & Lolli, S., 2025. Forecasting particulate matter
 concentration in Shanghai using a small-scale long-term dataset. Environmental Sciences Europe,
-37(1), p.47. [6](https://link.springer.com/article/10.1186/s12302-025-01068-y)
+37(1), p.47. [2](https://link.springer.com/article/10.1186/s12302-025-01068-y)
 
+Kim, B.Y., Lim, Y.K. & Cha, J.W., 2022. Short-term prediction of particulate matter (PM10 and
+PM2.5) in Seoul, South Korea using tree-based machine learning algorithms. Atmospheric Pollution
+Research, 13(10), p.101547. [3](https://www.sciencedirect.com/science/article/pii/S1309104222002288)
+
+Shiroshita, A., Kataoka, Y., Anan, K. & Yajima, N., 2025. Nationwide Spatiotemporal Modeling of
+Air Pollutants in Japan Using Generalized Random Forest Models. Environmental Advances,
+p.100681. [4](https://www.sciencedirect.com/science/article/pii/S2666765725000729)
+
+Guo, Z., Yang, C., Wang, D. & Liu, H., 2023. A novel deep learning model integrating CNN and
+GRU to predict particulate matter concentrations. Process Safety and Environmental Protection, 173,
+pp.604–613. [5](https://www.sciencedirect.com/science/article/pii/S0957582023002550?casa_token=FkedGfPXAZkAAAAA:kkaXGNaTLh5wszPuC3YKNJvYKanRp1D8u-NQtDzgpKE4xQDExnlLfNlAuEAaVoAFKLpVvrBVszDB#sec0040)
+
+Park, S.Y., Woo, S.H. & Lim, C., 2023. Predicting PM10 and PM2.5 concentration in container
+ports: A deep learning approach. Transportation Research Part D: Transport and Environment, 115,
+p.103601. [6](https://www.sciencedirect.com/science/article/pii/S1361920922004278?casa_token=gjy9OKgVI2EAAAAA:VNw-y79v7Yt5XypHIoecui66HRVC_dLa6hoS8HIcjmk5R8-_H-gZZ7B5nhYh2R-K7BH98qdWhwn6#s0050)
 
 ## **License**
 MIT License
