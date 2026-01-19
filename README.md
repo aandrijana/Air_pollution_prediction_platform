@@ -168,13 +168,16 @@ Overall, the models are performing very well, but there is still room to improve
 
 Next Steps:
 
-Feature Engineering
+- Feature Engineering
+  
 Add seasonal and weather-related features (like temperature, humidity, wind) to help the model better understand air quality patterns.
 
-Update the Web Dashboard
+- Update the Web Dashboard
+  
 Improve the dashboard so it shows real-time predictions and sends alerts when pollution levels are high.
 
-Monitoring & Automation
+- Monitoring & Automation
+  
 Set up a pipeline that automatically updates data and retrains the model regularly so the predictions stay accurate.
 
 ## **References**
